@@ -1,5 +1,4 @@
 import React from 'react';
-//import NewPostForm from './NewPostForm';
 import PropTypes from 'prop-types';
 import {v4} from 'uuid';
 
@@ -21,7 +20,7 @@ function NewPostForm(props) {
 
   function handleNewPostFormSubmission(event) {
     event.preventDefault;
-    props.onNewPostCreation({title: _title.value, url: _url.value, id: v4()});
+    props.onNewPostCreation({title: _title.value, url: _url.value, id: v4(), likes: 0});
     _title.value = '';
     _url.value = '';
   }

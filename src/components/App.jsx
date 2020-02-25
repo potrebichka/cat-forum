@@ -9,15 +9,30 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      masterPostList: []
+      masterPostList: {}
     };
     this.handleAddingNewPostToList = this.handleAddingNewPostToList.bind(this);
+    this.handleClickThumbsUp = this.handleClickThumbsUp.bind(this);
+    this.handleClickThumbsDown = this.handleClickThumbsDown.bind(this);
   }
 
   handleAddingNewPostToList(newPost) {
-    var newMasterPostList = this.state.masterPostList.slice();
-    newMasterPostList.push(newPost);
+    const newPostId = newPost.id;
+    const newMasterPostList = Object.assign({}, this.state.masterPostList, {[newPostId]: newPost});
     this.setState({masterPostList: newMasterPostList});
+  }
+
+  handleClickThumbsUp(id) {
+    const likedPost = Object.assign({}, this.state.masterPostList[id], {likes: this.state.masterPostList[id].likes+1});
+    const updatedPostList = Object.assign({}, this.state.masterPostList, {[id]: likedPost});
+    console.log(updatedPostList);
+    this.setState({masterPostList: updatedPostList});
+  }
+
+  handleClickThumbsDown(id) {
+    const likedPost = Object.assign({}, this.state.masterPostList[id], {likes: this.state.masterPostList[id].likes-1});
+    const updatedPostList = Object.assign({}, this.state.masterPostList, {[id]: likedPost});
+    this.setState({masterPostList: updatedPostList});
   }
 
   render() {
@@ -25,7 +40,7 @@ class App extends React.Component {
       <div>
         <Header/>
         <Switch>
-          <Route exact path='/' render={()=> <PostList postList={this.state.masterPostList} />} />
+          <Route exact path='/' render={()=> <PostList postList={this.state.masterPostList} onClickThumbsUp={this.handleClickThumbsUp} onClickThumbsDown={this.handleClickThumbsDown}/>} />
           <Route path='/newpost' render={() => <NewPostForm onNewPostCreation={this.handleAddingNewPostToList} />} />
           <Route component={Error404} />
         </Switch>
